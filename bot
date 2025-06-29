@@ -1,0 +1,35 @@
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.enums import ParseMode
+from flask import Flask
+from threading import Thread
+
+TOKEN = "8196818403:AAEE4DLtgSXC9FrtO2vbikc3EhmzTV83SKs"
+SELLER_CHAT_ID = 7235808361  # ID чата продавцов
+
+app = Flask("")
+
+@app.route("/")
+def home():
+    return "Bot is alive!"
+
+def run_flask():
+    app.run(host="0.0.0.0", port=8080)
+
+def keep_alive():
+    t = Thread(target=run_flask)
+    t.start()
+
+async def main():
+    bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)
+    dp = Dispatcher()
+
+    @dp.message()
+    async def handle_message(message: types.Message):
+        await message.answer("Принято!")
+
+    await dp.start_polling(bot)
+
+if name == "__main__":
+    keep_alive()
+    asyncio.run(main())
